@@ -63,7 +63,7 @@ class KtProject : Project {
             prconfig!!.getRoot() + "/" + prconfig!!.getProject() + "/" + branchDir);
         environment.put("BUILDID", Integer.toString(pm.getNextBuildId(prconfig!!.getProject(), branch)));
 
-        val script = glconfig!!.pipelineDirectory.resolve(prconfig!!.getPipeline(branch) + ".xml")
+        val script = glconfig!!.pipelineDirectory.resolve(prconfig!!.getPipeline(branch) + ".kts")
 
         val pipeline = Scripting().evalScript(environment, script)
 

@@ -15,15 +15,17 @@ limitations under the License.
  **/
 package vassilidzuba.yacic.ktimpl
 
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import vassilidzuba.yacic.model.Node
 import java.io.FileOutputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class KtPodmanStepTest {
-    val log = LoggerFactory.getLogger(KtPodmanStepTest::class.java)
+    val log : Logger? = LoggerFactory.getLogger(KtPodmanStepTest::class.java)
 
     @Test
     fun test1() {
@@ -36,7 +38,7 @@ class KtPodmanStepTest {
         step.id = "test"
         step.description = "test podman test"
         step.image = "docker.io/library/debian:stable"
-        step.command = "podman run -it docker.io/library/debian:stable ls"
+        step.command = "docker.io/library/debian:stable ls"
         step.role = "test"
 
         FileOutputStream(logFile!!.toFile(), true).use { os ->
@@ -44,11 +46,12 @@ class KtPodmanStepTest {
             val status = step.run( pconfig, os, nodes)
             os.flush()
 
-            println("exist status = $status")
+            log!!.info("exist status = {}", status)
+            assertEquals("0", status)
         }
 
         val logdata = Files.readString(logFile)
-        log.info("log : {}", logdata)
+        log!!.info("log : {}", logdata)
 
     }
 }

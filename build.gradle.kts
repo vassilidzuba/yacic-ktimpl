@@ -37,6 +37,7 @@ dependencies {
     testImplementation("ch.qos.logback:logback-classic:1.5.18")
     testRuntimeOnly("org.jetbrains.kotlin:kotlin-main-kts:${kotlinVersion}")
     testRuntimeOnly("org.jetbrains.kotlin:kotlin-scripting-jsr223:${kotlinVersion}")
+    testRuntimeOnly("com.h2database:h2:2.3.232")
 }
 
 tasks.test {

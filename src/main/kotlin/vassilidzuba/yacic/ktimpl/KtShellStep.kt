@@ -41,10 +41,12 @@ class KtShellStep : KtStep() {
         val podmanutil = Podmanutil()
         podmanutil.nodes = nodes
 
-        podmanutil.runLocalOrRemote(os, command, role)
+        val fullcommand = "${command} ; echo PODMANTERMINATION \$?; "
+
+        val status = podmanutil.runLocalOrRemote(os, fullcommand, role)
 
 
-        return "ok"
+        return status
     }
 
     override fun toString(): String {

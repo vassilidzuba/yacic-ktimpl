@@ -64,14 +64,29 @@ class KtPipeline : AbstractPipeline<KtPipelineConfiguration>() {
         flags: MutableSet<String?>?
     ): PipelineStatus<KtPipelineConfiguration>? {
 
+        var exitcode = "0"
+        var failedStep : KtStep? = null
+
         FileOutputStream(logFile!!.toFile(), true).use { os ->
 
-            steps.forEach {
-                it.run(pconfig, os, nodes)
+            for (step in steps ) {
+                exitcode = step.run(pconfig, os, nodes)
+                if (exitcode != "0") {
+                    failedStep = step
+                    break;
+                }
             }
         }
 
-        return PipelineStatus<KtPipelineConfiguration>(this)
+        val ps =  PipelineStatus<KtPipelineConfiguration>(this)
+        ps.id = name
+        if (exitcode == "0") {
+            ps.status = "ok"
+        } else {
+            ps.status = "step ${failedStep!!.id}"
+        }
+
+        return ps
     }
 
     override fun initialize(initialStep: String?): PipelineStatus<KtPipelineConfiguration?>? {

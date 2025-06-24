@@ -61,7 +61,7 @@ class KtPodmanStep : KtStep() {
 
         val fullcommand = "podman run -it --rm ${command} ; echo PODMANTERMINATION \$?; "
 
-        val status = podmanutil.runLocalOrRemote(os, command, role)
+        val status = podmanutil.runLocalOrRemote(os, fullcommand, role)
 
         return status
     }

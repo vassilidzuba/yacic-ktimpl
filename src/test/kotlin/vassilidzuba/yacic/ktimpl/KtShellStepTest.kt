@@ -23,6 +23,7 @@ import java.io.FileOutputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class KtShellStepTest {
     val log : Logger? = LoggerFactory.getLogger(KtShellStepTest::class.java)
@@ -43,8 +44,11 @@ class KtShellStepTest {
 
         FileOutputStream(logFile!!.toFile(), true).use { os ->
 
-            step.run( pconfig, os, nodes)
+            val status = step.run( pconfig, os, nodes)
             os.flush()
+
+            log!!.info("exist status = {}", status)
+            assertEquals("0", status)
         }
 
         val logdata = Files.readString(logFile)
