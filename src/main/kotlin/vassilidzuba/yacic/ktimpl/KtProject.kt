@@ -18,11 +18,14 @@ package vassilidzuba.yacic.ktimpl
 
 import org.slf4j.LoggerFactory
 import vassilidzuba.yacic.model.GlobalConfiguration
+import vassilidzuba.yacic.model.Node
 import vassilidzuba.yacic.model.Project
 import vassilidzuba.yacic.model.ProjectConfiguration
 import vassilidzuba.yacic.model.RunStatus
 import vassilidzuba.yacic.model.exceptions.NoSuchBranchException
 import vassilidzuba.yacic.persistence.PersistenceManager
+import java.nio.file.Files
+import java.nio.file.Path
 import java.util.function.Supplier
 
 
@@ -67,7 +70,18 @@ class KtProject : Project {
 
         val pipeline = Scripting().evalScript(environment, script)
 
-        return null
+        val pconfig = KtPipelineConfiguration()
+        var logFile = Path.of("build/tmp/test/foo.log")
+        Files.deleteIfExists(logFile)
+
+        val nodes = glconfig!!.nodes
+        val flags : MutableSet<String?>?  = mutableSetOf()
+
+        val pstatus = pipeline.run(pconfig, logFile, nodes, flags)
+
+        var runStatus = RunStatus(prconfig!!.project, branch, "now", pstatus!!.status, 0, pipeline.name )
+
+        return runStatus
 
     }
 

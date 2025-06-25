@@ -32,8 +32,9 @@ class KtProjectTest {
         gc.actionDefinitionDirectory = Path.of("config/actionDefinitions")
         gc.setPipelineDirectory(Path.of("config/pipelines"))
         gc.setProjectDirectory(Path.of("config/projects"))
-        gc.setLogsDirectory(Path.of("target/logs"))
-        gc.setNodes(List.of<Node?>(Node("odin", "java", "git")))
+        val logsDirectory = Path.of("build/tmp/test/")
+        gc.setLogsDirectory(logsDirectory)
+        gc.setNodes(List.of<Node?>(Node("odin", "java", "git", "docker")))
         gc.setMaxNbLogs(5)
 
         val projectPath = Path.of("config/projects/hellojavakt.json")

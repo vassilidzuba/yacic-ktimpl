@@ -59,7 +59,7 @@ class KtPodmanStep : KtStep() {
         var podmanutil = Podmanutil()
         podmanutil.nodes = nodes
 
-        val fullcommand = "podman run -it --rm ${command} ; echo PODMANTERMINATION \$?; "
+        val fullcommand = setup + "podman run -it --rm ${command} ; echo PODMANTERMINATION \$?; "
 
         val status = podmanutil.runLocalOrRemote(os, fullcommand, role)
 
