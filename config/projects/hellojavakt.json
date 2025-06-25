@@ -1,0 +1,21 @@
+{
+	"project": "hellojava",
+	"implementation": "kt",
+	"repo": "http://odin.manul.lan:3000/vassili/hellojava.git",
+	"root": "/mnt/yacic",
+	
+	"pipeline": "java-maven",
+	"pipelines": [
+		{"branch": "main", "pipeline": "java-release"}
+	],
+	
+	"branches": [
+		{"name": "main",            "dir": "b0"},
+		{"name": "feature/initial", "dir": "b1"}
+	],
+	"flags": [],
+	"properties": [
+		{"key": "DOCKERTAG", "value": "192.168.0.20:5000/hellojava:1.0"}
+	]
+	
+}
