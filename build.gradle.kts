@@ -1,5 +1,7 @@
 plugins {
     kotlin("jvm") version "2.1.21"
+    `java-library`
+    `maven-publish`
 }
 
 group = "vassilidzuba.yacic"
@@ -45,4 +47,29 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(21)
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes["Implementation-Title"] = "Yacic kotlin pipeline implementation"
+        attributes["Implementation-Version"] = "1.0.0"
+    }
+}
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
+    }
+
+    repositories {
+        maven {
+            url = uri("http://odin.manul.lan:8081/repository/maven-snapshots")
+            isAllowInsecureProtocol = true
+            credentials {
+                username = System.getenv("REPO_USER") ?: ""
+                password = System.getenv("REPO_PASSWORD") ?: ""
+            }
+        }
+    }
 }
