@@ -18,16 +18,15 @@ package vassilidzuba.yacic.ktimpl
 
 import org.slf4j.LoggerFactory
 import vassilidzuba.yacic.model.GlobalConfiguration
-import vassilidzuba.yacic.model.Node
 import vassilidzuba.yacic.model.Project
 import vassilidzuba.yacic.model.ProjectConfiguration
 import vassilidzuba.yacic.model.RunStatus
 import vassilidzuba.yacic.model.exceptions.NoSuchBranchException
 import vassilidzuba.yacic.persistence.PersistenceManager
 import java.nio.file.Files
-import java.nio.file.Path
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.function.Supplier
-
 
 
 class KtProject : Project {
@@ -71,7 +70,10 @@ class KtProject : Project {
         val pipeline = Scripting().evalScript(environment, script)
 
         val pconfig = KtPipelineConfiguration()
-        var logFile = Path.of("build/tmp/test/foo.log")
+        val logDir = glconfig!!.logsDirectory
+        val timestamp = getTimeStamp()
+        val logFile = logDir.resolve(prconfig!!.project).resolve(prconfig!!.project + "_" + branchDir + "_" + timestamp + ".log")
+        Files.createDirectories(logFile.parent)
         Files.deleteIfExists(logFile)
 
         val nodes = glconfig!!.nodes
@@ -87,6 +89,10 @@ class KtProject : Project {
 
     override fun reload() {
         log.info("reload is useless for a Kt project")
+    }
+
+    private fun getTimeStamp(): String {
+        return DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(LocalDateTime.now())
     }
 
 }
